@@ -1,0 +1,1 @@
+juego con multicanvas y mapeado creado con renderizados en blender.

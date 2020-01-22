@@ -1,0 +1,417 @@
+<html>
+    <head>
+        <script src="jquery-3.3.1.min.js"></script>
+        <style>
+        html,body{
+            padding:0px;
+            margin:0px;
+            overflow:hidden;
+        }
+            #tutorial{position:absolute;top:50px;left:1200px}
+            #fondo{position:absolute;top:50px;left:50px;}
+            #colision{position:absolute;top:50px;left:50px}
+            #naves{position:absolute;top:50px;left:50px}
+            #win{position:absolute;top:400px;left:400px;display:none;color: white}
+            #contenedor{position:absolute;color: red ;top:50px;left:50px}
+            #contenedorchat{position:absolute;width:300px;border:1px solid grey;border-radius:10px;padding:10px;top:150px;left:1400px}
+            #contenedorbutton{position:absolute;width:300px;border:1px solid grey;border-radius:10px;padding:10px;top:50px;left:1400px}
+            #mensajes{width:250px;height:500px;background:grey;margin:auto;overflow-y:scroll;padding:20px;font-family:sans-serif;}
+            #tunombre{width:250px;margin:auto;}
+            
+            
+        </style>
+    </head>
+    <body>
+        
+        
+        <canvas id="tutorial" width="188px" height="500px"></canvas>
+        <canvas id="fondo" width="1000px" height="500px"></canvas>
+        <canvas id="colision" width="1000px" height="500px"></canvas>
+        <canvas id="naves" width="1000px" height="500px"></canvas>
+        
+        <div id="contenedorbutton">
+            <button id= "iniciar">iniciar</button>
+            <button id="reiniciar">reiniciar coordenadas</button><br>
+            <button id="musica">musica</button>
+            <input type="range" min="0" max="1" step="0.1" id="slidervolumen">
+        </div>
+       
+        <p id="win">Has llegado a la base</p>
+       
+        <meta charset="UTF-8">
+       
+        <div id="contenedor">
+                <h1>Login si ya tienes usuario</h1>
+               
+                    <input type="text" name="usuario" placeholder="usuario" id="usuariologin"><br>
+                    <input type="text" name="contrasena" placeholder="Contrasena" id="contrasenalogin"><br>
+                    <button id="envialogin">Enviar</button>
+                    <div id="reciberespuestalogin"></div>
+               
+                <h1>Signin si no tienes usuario</h1>
+                
+                    <input type="text" name="usuario" placeholder="usuario" id="usuariosignin"><br>
+                    <input type="text" name="email" placeholder="email" id="emailsignin"><br>
+                    <input type="text" name="nombre" placeholder="nombre" id="nombresignin"><br>
+                    <input type="text" name="apellidos" placeholder="apellidos" id="apellidossignin"><br>
+                    <input type="text" name="contrasena" placeholder="Contrasena" id="contrasenasignin"><br>
+                    <input type="text" name="edad" placeholder="edad" id="edadsignin"><br>
+                    <input type="text" name="nave" placeholder="nave ejemplo: nave1" id="navesignin"><br>
+                    <button id="enviasignin">Enviar</button>
+                    <div id="reciberespuestasignin"></div>
+            </div>
+        
+            <div id="ajaxenvia"></div>
+            <div id="ajaxrecibe"></div>
+        
+        <div id="contenedorchat">
+            <button id="cargarMensaje">recargar chat</button>
+            <input type="text" placeholder="usuario" id="tunombre">
+            <div id="mensajes">
+                
+            </div>
+            <input type="text" placeholder="mensaje" id="nuevomensaje">
+            <button id="enviamensaje">Enviar</button>
+            
+            <script>
+                var mapax= 0;
+                
+                var vamosajugar = false;
+                
+                var contextoTutorial = document.getElementById("tutorial").getContext("2d")
+                var contextoFondo = document.getElementById("fondo").getContext("2d")
+                var contextoColision = document.getElementById("colision").getContext("2d")
+                var contextoNaves = document.getElementById("naves").getContext("2d")
+               
+                var imgFondo = new Image();imgFondo.src = "imagenes/fondo.png";
+                var imgColisiones = new Image();imgColisiones.src = "imagenes/colisiones.png";
+                var imgTutorial = new Image();imgTutorial.src = "imagenes/tutorial.png";
+               
+                var nave1 = new Image();nave1.src = "imagenes/1.png";
+                var nave2 = new Image();nave2.src = "imagenes/2.png";
+                var nave3 = new Image();nave3.src = "imagenes/3.png";
+                var nave4 = new Image();nave4.src = "imagenes/4.png";
+                var nave5 = new Image();nave5.src = "imagenes/5.png";
+                
+                var mix = 200;
+                var miy = Math.random()*450;
+                /*var avancex;
+                var avancey;*/
+                
+                /////variables direcciones movimiento///////////
+                var myw = false;
+                var mys = false;
+                var mxi = false;
+                var mxd = false;
+             /*   
+                
+                   $(document).keypress(function(event){
+                // Esto es lo que pasa cuando pulso la W
+                if ( event.which == 119 ) {avancey = -1;}
+                // Esto es lo que pasa cuando pulso la S
+                if ( event.which == 115 ) {avancey = 1;}
+                // Esto es lo que pasa cuando pulso la A
+                if ( event.which == 97 ) {avancex = -1;}
+                // Esto es lo que pasa cuando pulso la D
+                if ( event.which == 100 ) {avancex = 1;}
+            })
+             $(document).keyup(function(event){
+                 // Esto es lo que pasa cuando pulso la W
+                if ( event.which == 87 ) {avancey = 0;}
+                // Esto es lo que pasa cuando pulso la S
+                if ( event.which == 83 ) {avancey = 0;}
+                // Esto es lo que pasa cuando pulso la A
+                if ( event.which == 65 ) {avancex = 0;}
+                // Esto es lo que pasa cuando pulso la D
+                if ( event.which == 68 ) {avancex = 0;}
+            })
+                */
+                
+               
+                // Gestión de las teclas
+                $(document).keydown(function (event) {
+                if (event.key == "w") { 
+                    myw = true;
+                    
+                }
+  
+                
+                if (event.key == "a") { 
+                    mxi = true;
+
+                }
+                if (event.key == "d") {
+                    mxd = true;
+
+                }
+                if (event.key == "s") {
+                    mys = true;
+
+                }
+              
+            });
+             $(document).keyup(function (event) {
+                if (event.key == "w") { myw = false}
+                if (event.key == "a") { mxi = false}
+                if (event.key == "d") { mxd = false}
+                if (event.key == "s") { mys = false}
+                
+            });
+            /////////////////////click iniciar juego////////////
+              $("#iniciar").click(function(){
+                  vamosajugar = true;
+              })
+              
+              ////////////reinicio de coordenadas
+              $("#reiniciar").click(function(){
+                 mix = 200;
+                 miy = Math.random()*450;
+                 mapax = 0;
+                vamosajugar = false;
+                 
+              })
+              
+            ///////////////////login//////////////////
+             $("#envialogin").click(function(){
+                $("#reciberespuestalogin").load("php/login.php?usuario="+$("#usuariologin").val()+"&contrasena="+$("#contrasenalogin").val(),function(){
+                    console.log($("#reciberespuestalogin").text())
+                    if( $("#reciberespuestalogin").text().includes("ok") ){
+                        $("#contenedor").hide("slow")
+                        $("#fondo").show("slow")
+                        $("#naves").show("slow")
+                        $("#colision").show("slow")
+                        
+                    }else{
+                        $("#contenedor").show("slow")
+                    }
+                    
+                    
+                })
+                
+            })
+            /////////////registro//////////////
+            
+            $("#enviasignin").click(function(){
+                $("#reciberespuestasignin").load("php/signin.php?usuario="+$("#usuariosignin").val()
+                +"&email="+$("#emailsignin").val()
+                +"&nombre="+$("#nombresignin").val()
+                +"&apellidos="+$("#apellidossignin").val()
+                +"&contrasena="+$("#contrasenasignin").val()
+                +"&edad="+$("edadsignin").val()
+                +"&nave="+$("#navesignin").val()
+                +"&posx="+mix
+                +"&posy="+miy,function(){
+                    
+                    
+                })
+            })
+            
+                ////////////////////musica////////////////
+                
+                var audio = new Audio("musica/musica.mp3")
+                $("#musica").click(function(){
+                            
+                    audio.play();
+                            
+                })
+                $("#slidervolumen").change(function(){
+                    audio.volume = $(this).val();
+                })
+            ///////////////////chat///////////////
+                $("#enviamensaje").click(function(){
+
+                    $.ajax({
+                   async:true,
+                   type: "POST",
+                   dataType: "html",
+                   contentType: "application/x-www-form-urlencoded",
+                   url:"php/escribemensaje.php",
+                   data:"usuario="+$("#tunombre").val()+"&mensaje="+encodeURI($("#nuevomensaje").val()),
+                   beforeSend:inicioEnvia,
+                   success:exitoEnvia,
+                   timeout:4000,
+                   error:problemaEnvia
+                 }); 
+                })
+                $("#cargarMensaje").click(function(){
+                 $.ajax({
+                       async:true,
+                       type: "POST",
+                       dataType: "html",
+                       contentType: "application/x-www-form-urlencoded",
+                       url:"php/leemensajes.php",
+                       beforeSend:inicioRecibe,
+                       success:exitoRecibe,
+                       timeout:4000,
+                       error:problemaRecibe
+                     }); 
+                     $("#mensajes").scrollTop(1000000000)
+                })
+                
+                function inicioEnvia(){}
+                function exitoEnvia(){
+                    $("#nuevomensaje").val("")
+                }
+                function problemaEnvia(){}
+                function inicioRecibe(){}
+                function exitoRecibe(datos){
+                    $("#mensajes").html(datos)
+                }
+                function problemaRecibe(){}
+                
+                /////////////////////////inicio/////////////////
+                inicio();
+                function inicio(){
+                    contextoFondo.drawImage(imgFondo,0,0)
+                    contextoTutorial.drawImage(imgTutorial,0,0)
+                    bucle();
+                }
+                function bucle(){
+                    contextoColision.clearRect(0,0,1000,500)
+                    contextoNaves.clearRect(0,0,1000,500)
+                    contextoFondo.drawImage(imgFondo,0,0)
+                    
+                    
+            /*        
+                    
+                    
+                    ////////////////colisiones//////////
+        
+        /////abajo/////
+        
+                                         
+          var alfaS = contextoColision.getImageData(mix+25,miy+50,1,1).data[3]
+            var alfaS2 = contextoNaves.getImageData(mix,miy+25,1,1).data[3]
+                if(alfaS == 0 ){
+                         
+                }else{
+                    mys = false;
+                     
+                    }
+            if(alfaS2 == 0 ){
+                     
+                }else{
+                    mix-=10
+                  
+                    }
+                
+                
+        /////arriba/////
+        
+        
+            var alfaW = contextoColision.getImageData(mix+25,miy,1,1).data[3]
+            var alfaW2 = contextoNaves.getImageData(mix,miy+25,1,1).data[3]
+                if(alfaW == 0){
+                      
+                }else{
+                    myw = false;
+                  
+                    }
+            if(alfaW2 == 0 ){
+                     
+                }else{
+                    miy+=10
+                  
+                    }
+                
+        
+        /////derecha//////
+        
+        
+            var alfaD = contextoColision.getImageData(mix+50,miy+25,1,1).data[3]
+            var alfaD2 = contextoNaves.getImageData(mix,miy+25,1,1).data[3]
+                if(alfaD == 0 ){
+                       
+                }else{
+                    mxd = false;
+                   
+                    }
+            if(alfaD2 == 0 ){
+                     
+                }else{
+                    mix-=10
+                  
+                    }
+            
+        ////izquierda//////
+            
+            var alfaA = contextoColision.getImageData(mix,miy+25,1,1).data[3]
+            var alfaA2 = contextoNaves.getImageData(mix,miy+25,1,1).data[3]
+                if(alfaA == 0 ){
+                     
+                }else{
+                    mxi = false;
+                  
+                    }
+             if(alfaA2 == 0 ){
+                     
+                }else{
+                    mix+=10
+                  
+                    }
+              */      
+            /////////////////////////condiciones movimiento///////////////////////
+            if (mix <=20){mxi = false}
+            if (mix >=980){mxi = false}
+            if (miy <=20){mxi = false}
+            if (miy >=480){mxi = false}
+                 
+                   
+                    
+                   
+                    if(mxd == true){mix+=10}
+                    if(mxi == true){mix-=10}
+                    if(mys == true){miy+=10}
+                    if(myw == true){miy-=10}
+                    
+           
+                //////////////envio y recuperio info de la base de datos/////////////////
+                $("#ajaxenvia").load("php/envia.php?usuario="+$("#usuariologin").val()+"&posx="+mix+"&posy="+miy);
+                $("#ajaxrecibe").load("php/dame.php",function(){
+                    var longaniza = $("#ajaxrecibe").text();
+                    var partido = longaniza.split("|")
+                    //console.log("partido"+partido)
+                    for(var i = 0;i<partido.length;i++){
+                        var requetepartido = partido[i].split("-")
+                      
+
+                        switch(requetepartido[3]){
+                            case "nave1":
+                                contextoNaves.drawImage(nave1,requetepartido[1],requetepartido[2])
+                                break;
+                            case "nave2":
+                                contextoNaves.drawImage(nave2,requetepartido[1],requetepartido[2])
+                                break;
+                            case "nave3":
+                                contextoNaves.drawImage(nave3,requetepartido[1],requetepartido[2])
+                                break;
+                            case "nave4":
+                                contextoNaves.drawImage(nave4,requetepartido[1],requetepartido[2])
+                                break;
+                            case "nave5":
+                                contextoNaves.drawImage(nave5,requetepartido[1],requetepartido[2])
+                                break;
+                        }
+
+                        console.log(requetepartido[1],requetepartido[2],requetepartido[3])
+                        
+                    }
+                });
+                ///////////movimiento del mapa//////////////
+                if(vamosajugar == true){
+                   
+                    mapax-=10
+                    contextoColision.drawImage(imgColisiones,mapax,0);
+                    if(mapax >=5600){
+                        vamosajugar=false;
+                        $("#win").show("slow")
+                    }
+                }
+                
+                setTimeout("bucle()",100)
+                }
+                
+            </script>
+        </div>
+    </body>
+</html>

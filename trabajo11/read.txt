@@ -1,0 +1,1 @@
+bot que aprende cuando disparar durante la fase 1 y durante la fase 2 solo dispara cuando va a impactar en el enemigo

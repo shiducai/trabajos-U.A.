@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script src="js/jquery-3.3.1.min.js"></script>
+     
+        <style >
+           
+           html, body{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;}
+           
+           #back{position:absolute;display: none}
+           #teclas{position:absolute;display: none}
+           #npc{position:absolute;display: none}
+           #HUD{position:absolute;left: 900; background: black}
+           
+           
+           #iniciar{position: absolute;left: 400;top:400}
+           #lose{display:none;position:absolute;left: 1000;color:white;top:200}
+           #win{display:none;position:absolute;left: 1000;color:white;top:200}
+           #marcador{position:absolute;left: 1000;color:white}
+        
+           
+        </style>
+    </head>
+    <body>
+        <div id="contenedor">
+        <canvas id="back" width=800px height=1000px></canvas>
+        <canvas id="teclas" width=800px height=1000px></canvas>
+        <canvas id="npc" width=800px height=1000px></canvas>
+        <canvas id="HUD" width=400px height=400px></canvas>
+        </div>
+        
+        <div id="menuPrincipal">
+            <button id ="iniciar">iniciar</button>
+           
+        </div>
+        
+        
+        <div id= "win">
+           
+           <p class ="reiniciar">volver menu</p>
+        </div>
+        
+        <div id= "lose">
+         
+           <p class ="reiniciar">volver menu</p>
+        </div>
+        
+        <div id= "marcador"></div>
+      
+        
+        <script src="js/condicionesIniciales.js"></script>
+        <script src="js/controles.js"></script>
+        <script src="js/bucle.js"></script>
+
+        
+    </body>
+</html>

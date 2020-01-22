@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <script src="js/jquery-3.3.1.min.js"></script>
+     
+       <style >
+           
+           html, body{width:100%;height:100%;margin:0px;padding:0px;overflow:hidden;}
+            #back{position:absolute;background-color: black}
+            #escenario{position:absolute;}
+            #masc{display:none;position:absolute;}
+            #npc{display:none;position:absolute;}
+            #lvl2{display:none;position:absolute;}
+            #lvl2masc{display:none;position:absolute;}
+            
+            
+            #menuPrincipal,#menuCreditos,#menuInstrucciones,#menuLose,#menuWin,#menuwin2,#menuControles{
+                width:400;
+                height:400;
+                position:absolute;
+                color:white;
+                font-size:30px;
+                text-align:center;
+                font-family:menuPrincipal;
+             }
+              #menuInstrucciones{
+                display:none;
+             }
+             #menuControles{
+                display:none;
+             }
+            
+             #menuLose{
+                display:none;
+             }
+             #menuWin{
+                display:none;
+            }
+            #menuWin2{
+                display:none;
+            }
+            
+           
+       </style>
+      
+
+        
+    </head>
+    <body>
+        
+        <canvas id="back" width=2048px height=2048px></canvas>
+        <canvas id="escenario" width=1024px height=1024px></canvas>
+        <canvas id="masc" width=1024px height=1024px></canvas>
+        <canvas id= "npc" width=1024px height=1024px></canvas>
+        <canvas id="lvl2" width=500px height=500px></canvas>
+        <canvas id="lvl2masc" width=500px height=500px></canvas>
+        
+         <div id="menuPrincipal">
+
+                 <p id="inicio"> Inicio </p>
+                 <p id="instrucciones"> Instrucciones </p>
+                 <p id="controles"> Controles </p>
+                  
+                   </div>
+                <div id="menuLose">
+
+                <p class="reiniciar"> Volver al menu inicial </p>
+                  
+                </div>
+                 <div id="menuInstrucciones">
+                   tienes que llegar al final del laberinto aunque no todo es lo que parece
+                    <p class="volverMenu"> Volver al menu inicial </p>
+                </div>
+                
+                <div id="menuControles">
+                    A: moverte hacia la izquierda / D: moverte hacia la derecha / W: moverte hacia arriba / s: moverte hacia abajo / e :interactuar
+                    <p class="volverMenu"> Volver al menu inicial </p>
+                </div>
+                <div id="menuWin">
+                 has conseguido salir del primer laberinto, quien sabe lo que te esparera despues
+                <p class="nivel2"> nivel 2 </p>
+                <p class="reiniciar"> Volver al menu inicial </p>
+                </div>
+                 <div id="menuWin2">
+                 mas niveles proximamente
+                <p class="reiniciar"> Volver al menu inicial </p>
+                </div>
+                
+                
+                  
+
+        <script src="js/condicionesIniciales.js"></script>
+        
+        <script src="js/controles.js"></script>
+        <script src="js/inicioMap1.js"></script>
+        <script src="js/bucleMap1.js"></script>
+        <script src="js/buclemap2.js"></script>
+    </body>
+</html>

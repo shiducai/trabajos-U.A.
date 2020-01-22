@@ -1,0 +1,113 @@
+<html>
+    <head>
+        <style>
+            canvas{background:black;}
+        </style>
+         <script src="jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+        <canvas id="lienzo" width="600px" height="600px"></canvas>
+        <button id="fase1">Fase 1</button>
+        <button id="fase2">Fase 2</button>
+        <script>
+            var posxenemigo = 10;
+            var posyenemigo = 10;
+            var enquefaseestoy = 1;
+            $("#fase1").click(function(){enquefaseestoy = 1;})
+            $("#fase2").click(function(){enquefaseestoy = 2;posyenemigo = 10})
+            var navex = 256;
+            var navey = 490;
+            var contador = 0;
+            var enemigo = new Image();enemigo.src = "img/3.png";
+            var nave = new Image();nave.src = "img/pj.png";
+            var balax = new Array();
+            var balay = new Array();
+            var balamemoria = new Array();
+            var elegidosparalagloria = new Array();
+            var contadorgloria = 0;
+            var numerobalas = 0;
+            var direccionenemigo = 1;
+			var direccionpj = -1;
+            var contexto = document.getElementById("lienzo").getContext("2d")
+            contexto.fillStyle = "red"
+            setTimeout("bucle()",1000)
+            function bucle(){
+                contexto.clearRect(0,0,600,600)
+                contexto.drawImage(enemigo,posxenemigo,posyenemigo)
+                contexto.drawImage(nave,navex,navey)
+				//navex += direccionpj;
+                posxenemigo += direccionenemigo;
+                  if(enquefaseestoy == 1){
+                    if(contador % 10 == 0){
+                        balax[numerobalas] = navex;
+                        balay[numerobalas] = navey;
+						balamemoria[numerobalas] = {"xenemigo": posxenemigo,"yenemigo":posyenemigo,"xnave":navex,"ynave":navey,"enemigodireccion":direccionenemigo}
+                        //balamemoria[numerobalas] = {"xenemigo": posxenemigo,"yenemigo":posyenemigo,"xnave":navex,"ynave":navey,"enemigodireccion":direccionenemigo,"pjdireccion":direccionpj}
+                        numerobalas++;
+                    }
+                    // Vamos a ver si hay colision
+                    for(var i = 0;i<numerobalas;i++){
+                        if((balax[i] > posxenemigo - 10) && (balax[i] < posxenemigo + 10) && (balay[i] > posyenemigo - 10) && (balay[i] < posyenemigo + 10)){
+                            console.log("impacto")
+                            elegidosparalagloria[contadorgloria] = balamemoria[i]
+                            contadorgloria++
+                        }
+                    }
+                }
+                if(enquefaseestoy == 2){
+                    // Analizo las posiciones exitosas elegidas para la gloria
+                    for(var i = 0;i<contadorgloria;i++){
+						/*if(
+                            (elegidosparalagloria[i].xenemigo == posxenemigo)
+                            &&
+                            (elegidosparalagloria[i].yenemigo == posyenemigo)
+                            &&
+                            (elegidosparalagloria[i].xnave == navex)
+                            &&
+                            (elegidosparalagloria[i].ynave == navey)
+                            &&
+                            (elegidosparalagloria[i].enemigodireccion == direccionenemigo)
+							&&
+							(elegidosparalagloria[i].pjdireccion == direccionpj)"
+							
+                        ){
+                            balax[numerobalas] = navex;
+                            balay[numerobalas] = navey;
+                           " balamemoria[numerobalas] = {"xenemigo": posxenemigo,"yenemigo":posyenemigo,"xnave":navex,"ynave":navey,"enemigodireccion":direccionenemigo","pjdireccion":direccionpj}"
+                            numerobalas++;
+                        }*/
+                        if(
+                            (elegidosparalagloria[i].xenemigo == posxenemigo)
+                            &&
+                            (elegidosparalagloria[i].yenemigo == posyenemigo)
+                            &&
+                            (elegidosparalagloria[i].xnave == navex)
+                            &&
+                            (elegidosparalagloria[i].ynave == navey)
+                            &&
+                            (elegidosparalagloria[i].enemigodireccion == direccionenemigo)			
+                        ){
+                            balax[numerobalas] = navex;
+                            balay[numerobalas] = navey;
+							balamemoria[numerobalas] = {"xenemigo": posxenemigo,"yenemigo":posyenemigo,"xnave":navex,"ynave":navey,"enemigodireccion":direccionenemigo}
+                            numerobalas++;
+                        }
+                    }
+                }
+                if(posxenemigo > 512){direccionenemigo = -1;posyenemigo+=10;}
+                if(posxenemigo < 0){direccionenemigo = 1;posyenemigo+=10;}
+				/*if(navex > 512){direccionpj = -1};
+                if(navex < 0){direccionpj = 1};*/
+                for(var i = 0;i<numerobalas;i++){
+                    contexto.fillRect(balax[i],balay[i],1,4)
+                    balay[i]--;
+                }
+                
+               
+                contador++;
+                setTimeout("bucle()",1)
+            }
+            
+        </script>
+    </body>
+</html>
